@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 228 43% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 228 43% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 43% 9%;
+    --primary: 243 66% 48%;
+    --primary-foreground: 226 60% 99%;
+    --secondary: 228 28% 96%;
+    --secondary-foreground: 228 43% 13%;
+    --muted: 228 28% 96%;
+    --muted-foreground: 228 12% 43%;
+    --accent: 228 28% 95%;
+    --accent-foreground: 228 43% 13%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 152 62% 36%;
+    --success-foreground: 150 60% 98%;
+    --warning: 35 92% 40%;
+    --warning-foreground: 40 80% 98%;
+    --border: 228 18% 90%;
+    --input: 228 18% 88%;
+    --ring: 243 66% 48%;
+    --radius: 0.5rem;
+
+    /* Layered elevation */
+    --shadow-card: 0 1px 2px 0 rgb(24 29 58 / 0.04), 0 1px 3px 0 rgb(24 29 58 / 0.06);
+    --shadow-popover: 0 8px 28px -6px rgb(24 29 58 / 0.18), 0 2px 8px -2px rgb(24 29 58 / 0.08);
+  }
+
+  .dark {
+    --background: 228 43% 8%;
+    --foreground: 228 22% 95%;
+    --card: 228 36% 11%;
+    --card-foreground: 228 22% 95%;
+    --popover: 228 36% 11%;
+    --popover-foreground: 228 22% 95%;
+    --primary: 243 74% 64%;
+    --primary-foreground: 228 43% 8%;
+    --secondary: 228 24% 17%;
+    --secondary-foreground: 228 22% 96%;
+    --muted: 228 24% 17%;
+    --muted-foreground: 228 14% 66%;
+    --accent: 228 24% 17%;
+    --accent-foreground: 228 22% 96%;
+    --destructive: 0 64% 52%;
+    --destructive-foreground: 0 0% 98%;
+    --success: 152 62% 48%;
+    --success-foreground: 150 60% 10%;
+    --warning: 38 92% 54%;
+    --warning-foreground: 40 80% 12%;
+    --border: 228 22% 20%;
+    --input: 228 22% 22%;
+    --ring: 243 74% 64%;
+
+    --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-popover: 0 8px 28px -6px rgb(0 0 0 / 0.6), 0 2px 8px -2px rgb(0 0 0 / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Numbers align predictably across tables and metrics */
+  table,
+  .tabular-nums,
+  [data-tabular] {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.16);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-color: hsl(var(--foreground) / 0.18);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--foreground) / 0.3);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Faint blueprint/grid backdrop for hero and data panels */
+  .grid-tint {
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+@layer components {
+  .container-padded {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-spacing {
+    @apply py-12 sm:py-14 lg:py-16;
+  }
+
+  .panel {
+    @apply rounded-lg border bg-card text-card-foreground;
+    box-shadow: var(--shadow-card);
+  }
+
+  .panel-pop {
+    box-shadow: var(--shadow-popover);
+  }
+
+  /* Shared page heading rhythm */
+  .page-eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary;
+  }
+
+  .page-title {
+    @apply mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl;
+  }
+
+  .page-description {
+    @apply mt-3 max-w-2xl text-base leading-7 text-muted-foreground;
+  }
+}
