@@ -1,428 +1,327 @@
+<div align="center">
+
 # SiteCycle
 
-> **Find the next project for materials before they become waste.**
+**Find the next project for materials before they become waste.**
 
-SiteCycle is a construction material intelligence platform that helps project teams identify reusable surplus materials and match them with nearby construction projects that need them.
+A construction material intelligence platform that matches surplus materials on one site with real demand on nearby projects.
 
-Instead of treating leftover construction materials as waste, SiteCycle turns them into structured, searchable resources that can be evaluated, transferred, and measured for impact.
+![Status](https://img.shields.io/badge/status-MVP%20complete-brightgreen)
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
 
-**Product thesis:**
+</div>
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [How It Works](#how-it-works)
+- [AI Architecture](#ai-architecture)
+- [Matching Model](#matching-model)
+- [Impact Model](#impact-model)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [Demo Scenario](#demo-scenario)
+- [Product Principles](#product-principles)
+- [Scope](#scope)
+- [Roadmap](#roadmap)
+- [Author](#author)
+- [License](#license)
+
+---
+
+## Overview
+
+Construction projects often end with surplus materials while a nearby project is short of the very same materials. SiteCycle connects the two sides. Instead of treating leftovers as waste, it turns them into structured resources that can be **matched, transferred, and measured**.
+
+Every project moves through a single workflow:
+
+```text
+DECLARE → UNDERSTAND → MATCH → EVALUATE → TRANSFER → MEASURE
+```
+
+The core design principle:
 
 > **AI interprets. Software calculates. AI explains.**
 
 ---
 
-## Why SiteCycle?
+## How It Works
 
-Construction projects frequently have materials left over while other projects may need those same materials.
+### 1. Declare
 
-The problem is not simply finding buyers. It is understanding messy material information, identifying compatible demand, evaluating proximity and availability, and making the potential reuse opportunity understandable.
+Describe surplus materials in plain language:
 
-SiteCycle addresses that workflow as an intelligence layer:
+> "We have about 1,200 hollow blocks, 20 steel beams and around 45 sheets of plywood left over."
+
+### 2. Understand
+
+AI extracts structured material data from the description:
 
 ```text
-Messy Input
-    ↓
-AI Understanding
-    ↓
-Structured Materials
-    ↓
-Deterministic Matching
-    ↓
-Explainable Recommendation
-    ↓
-Transfer Plan
-    ↓
-Impact Measurement
-Product Workflow
-01 — DECLARE
-A project team describes surplus materials naturally:
+1,200 hollow blocks → 1,200 concrete blocks
+20 steel beams      → 20 steel beams
+45 sheets plywood   → 45 plywood sheets
+```
 
-"We have about 1,200 hollow blocks, 20 steel beams and around 45 sheets of plywood left over."
+The extracted inventory can be reviewed and edited before it is saved.
 
-02 — UNDERSTAND
-AI extracts structured material information from the description.
+### 3. Match
 
-For example:
+A deterministic matching engine evaluates nearby construction projects on:
 
-1,200 hollow blocks → Hollow Concrete Block × 1,200 pieces
-20 steel beams      → Steel Beam × 20 pieces
-45 sheets plywood  → Plywood Sheet × 45 sheets
-The extracted information can be reviewed and edited before it becomes inventory.
+- Material compatibility
+- Quantity coverage
+- Distance
+- Material condition
+- Demand urgency
 
-03 — MATCH
-SiteCycle evaluates potential destination projects using deterministic rules.
+### 4. Evaluate
 
-Matching considers:
+Each match presents:
 
-Material compatibility
+- Match score
+- Distance
+- Quantity coverage
+- Factor-by-factor breakdown
+- Material-level details
+- AI-generated explanation of why it was recommended
 
-Quantity coverage
+### 5. Transfer
 
-Geographic distance
+A selected match can be turned into a proposed transfer plan. Quantities are capped by both the available surplus and the destination's demand.
 
-Material condition
+### 6. Measure
 
-Demand urgency
+Potential impact is calculated from the transfer data:
 
-The matching engine does not ask an LLM to calculate the score.
+- Material mass
+- Recovered value
+- Waste avoided
+- Estimated CO₂e avoided
 
-04 — EVALUATE
-Each candidate match includes:
+Every impact figure is labeled by provenance: **Observed · Calculated · Estimated**.
 
-Match score
+---
 
-Distance
+## AI Architecture
 
-Quantity coverage
+AI is intentionally kept **outside** the core calculation path.
 
-Factor breakdown
+| AI handles | Software handles |
+| --- | --- |
+| Natural-language material extraction | Match scoring |
+| Match explanations | Distance calculations |
+| Transfer recommendations | Quantity, mass, and value calculations |
+| | Waste and CO₂e calculations |
 
-Material-level details
+If AI is unavailable, deterministic fallback implementations keep the core workflow fully functional.
 
-AI-generated explanation
+---
 
-The numerical reasoning remains deterministic and auditable.
+## Matching Model
 
-05 — TRANSFER
-A selected match can become a proposed transfer plan.
+Each match receives a weighted score across five factors:
 
-Transfer quantities are capped by available surplus and destination demand.
+| Factor | Weight |
+| --- | :---: |
+| Material compatibility | 30% |
+| Quantity coverage | 25% |
+| Distance | 20% |
+| Condition | 15% |
+| Urgency | 10% |
 
-AI can provide a concise operational recommendation based on the calculated transfer data.
+The engine also applies geographic and quantity thresholds, and uses the Haversine formula for distance calculations.
 
-06 — MEASURE
-SiteCycle calculates the potential impact of completed transfer records.
+---
 
-Impact includes:
+## Impact Model
 
-Material mass
+```text
+Mass                     = Quantity × Weight per Unit
+Recovered Value          = Quantity × Unit Value
+Waste Avoided            = Transferred Material Mass
+Estimated CO₂e Avoided   = Material Mass × CO₂e Factor
+```
 
-Recovered material value
+> **Note:** The current material and environmental factors are illustrative demonstration assumptions. They are not certified environmental measurements.
 
-Waste avoided
+---
 
-Estimated CO₂e avoided
+## Tech Stack
 
-Every metric carries provenance:
+| Layer | Technology |
+| --- | --- |
+| Framework | Next.js, React |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| AI provider | OpenRouter |
+| Validation | Zod |
+| Geospatial | Haversine distance calculations |
+| Core logic | Deterministic matching and impact engines |
+| Deployment | Vercel-ready |
 
-Observed · Calculated · Estimated
+---
 
-AI Architecture
-SiteCycle deliberately separates AI responsibilities from deterministic business logic.
+## Project Structure
 
-                    ┌─────────────────────┐
-                    │      User Input     │
-                    └──────────┬──────────┘
-                               ↓
-                    ┌─────────────────────┐
-                    │    AI Extraction    │
-                    │  Natural Language → │
-                    │   Structured JSON   │
-                    └──────────┬──────────┘
-                               ↓
-                    ┌─────────────────────┐
-                    │ Deterministic Core  │
-                    │                     │
-                    │ • Matching          │
-                    │ • Distance          │
-                    │ • Quantities        │
-                    │ • Impact            │
-                    └──────────┬──────────┘
-                               ↓
-                    ┌─────────────────────┐
-                    │     AI Explain      │
-                    │                     │
-                    │ Facts → Narrative   │
-                    └─────────────────────┘
-AI responsibilities
-AI is used for:
-
-Material extraction
-
-Natural language → structured material data
-
-Match explanation
-
-Deterministic match facts → human-readable explanation
-
-Transfer recommendation
-
-Deterministic transfer data → concise operational narrative
-
-AI does not calculate
-AI does not determine:
-
-Match scores
-
-Distances
-
-Quantities
-
-Material mass
-
-Recovered value
-
-Waste avoided
-
-CO₂e estimates
-
-This keeps the core system reproducible and auditable.
-
-Graceful degradation
-SiteCycle remains functional when AI is unavailable.
-
-The application includes deterministic fallbacks for:
-
-Material extraction
-
-Match explanations
-
-Transfer recommendations
-
-AI enhances the workflow rather than becoming a single point of failure.
-
-Matching Engine
-Candidate matches are evaluated using a deterministic weighted scoring model.
-
-Factor	Weight
-Material compatibility	30%
-Quantity coverage	25%
-Distance	20%
-Condition	15%
-Urgency	10%
-Additional constraints include:
-
-50 km geographic cutoff
-
-Minimum quantity coverage threshold
-
-Source project exclusion
-
-Deterministic tie-breaking
-
-Distance is calculated using the Haversine formula.
-
-The result is a reproducible ranking that can be inspected rather than an opaque AI-generated recommendation.
-
-Impact Model
-SiteCycle calculates impact from canonical material factors.
-
-Conceptually:
-
-Mass
-= Quantity × Weight per Unit
-
-Recovered Value
-= Quantity × Unit Value
-
-Waste Avoided
-= Transferred Material Mass
-
-Estimated CO₂e Avoided
-= Material Mass × CO₂e Factor
-The current demonstration factors are illustrative assumptions used to demonstrate the product workflow. They are not presented as certified environmental measurements.
-
-Tech Stack
-Application
-Next.js
-
-React
-
-TypeScript
-
-Tailwind CSS
-
-App Router
-
-AI
-OpenRouter
-
-Zod schema validation
-
-Server-side AI API routes
-
-Deterministic fallback parsing
-
-Core Logic
-TypeScript
-
-Haversine geospatial calculations
-
-Deterministic matching engine
-
-Deterministic impact calculations
-
-In-memory demo persistence
-
-Deployment
-Designed for deployment on Vercel.
-
-Project Structure
+```text
 src/
 ├── app/
 │   ├── api/
 │   │   └── ai/
-│   │       ├── extract/
-│   │       ├── explain/
-│   │       └── transfer/
-│   │
+│   │       ├── extract/      # Natural-language material extraction
+│   │       ├── explain/      # Match explanations
+│   │       └── transfer/     # Transfer recommendations
 │   ├── materials/
-│   │   └── new/
 │   ├── matches/
-│   │   └── [id]/
 │   ├── transfers/
-│   │   └── [id]/
 │   ├── impact/
 │   ├── network/
 │   └── actions.ts
 │
 └── lib/
     ├── ai/
+    ├── data/
     ├── geo/
     ├── impact/
     ├── matching/
-    ├── data/
     ├── materials/
     └── types.ts
-Getting Started
-Requirements
-Node.js 18+
+```
 
-npm
+---
 
-Installation
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Installation
+
+```bash
 git clone https://github.com/BefikerG/SiteCycle.git
 cd SiteCycle
 npm install
-Environment Variables
-Create .env.local:
+```
 
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
 OPENROUTER_API_KEY=your_api_key
 OPENROUTER_MODEL=your_model
-The AI integration is optional. Without an OpenRouter key, SiteCycle uses its deterministic fallback implementations.
+```
 
-Run locally
+> The OpenRouter integration is optional. Without an API key, SiteCycle falls back to its deterministic implementations.
+
+### Run in Development
+
+```bash
 npm run dev
-Open:
+```
 
-http://localhost:3000
-Production build
+Then open [http://localhost:3000](http://localhost:3000).
+
+### Production Build
+
+```bash
 npm run build
-Demo Scenario
-The seeded demonstration uses:
+```
 
-Source
+---
 
-Bole Commercial Center
+## Demo Scenario
 
-Destination
+**Source:** Bole Commercial Center
+**Destination:** Kality Residential Development
 
-Kality Residential Development
+**Input:**
 
-Input
+> "We have about 1,200 hollow blocks, 20 steel beams and around 45 sheets of plywood left over."
 
-"We have about 1,200 hollow blocks, 20 steel beams and around 45 sheets of plywood left over."
+**End-to-end flow:**
 
-The system then demonstrates the complete workflow:
-
+```text
 Natural-language surplus
         ↓
-AI material extraction
+AI extraction
         ↓
 Editable inventory
         ↓
 Deterministic matching
         ↓
-Match detail + explanation
+Match explanation
         ↓
 Transfer plan
         ↓
 Impact measurement
-Design Principles
-Deterministic core
-Business-critical calculations should be reproducible.
+```
 
-AI as an enhancement
-AI handles interpretation and communication, not core numerical truth.
+---
 
-Explainability
-Users should be able to understand why a match exists.
+## Product Principles
 
-Provenance
-Impact numbers explicitly communicate whether they are observed, calculated, or estimated.
+- **Deterministic core:** business-critical calculations are reproducible.
+- **AI as an enhancement:** AI interprets and explains, and never controls numerical truth.
+- **Explainability:** users can see why a match was recommended.
+- **Provenance:** impact metrics show how each figure was derived.
+- **Progressive disclosure:** complexity appears only when it becomes useful.
+- **Construction-first:** built around real construction material workflows, not a generic marketplace.
 
-Progressive disclosure
-The interface reveals complexity when it becomes useful instead of presenting every system detail at once.
+---
 
-Construction-first UX
-The product is designed around real project workflows rather than generic marketplace interactions.
+## Scope
 
-Current Scope
-SiteCycle is currently an MVP demonstrating the core intelligence workflow.
+SiteCycle is an MVP focused on construction material intelligence. It is **not** currently intended to be:
 
-It intentionally does not attempt to be:
+- A construction ERP
+- A procurement system
+- A logistics platform
+- A payments platform
+- A traditional marketplace
 
-A construction ERP
+---
 
-A procurement system
+## Roadmap
 
-A logistics platform
+- [ ] Persistent production database
+- [ ] Project and organization accounts
+- [ ] Verified material listings
+- [ ] Real-time demand
+- [ ] Transfer tracking
+- [ ] Logistics coordination
+- [ ] Evidence-backed environmental factors
+- [ ] Construction document ingestion
+- [ ] Material image recognition
+- [ ] Reuse analytics
+- [ ] Network-level circularity insights
 
-A payments platform
+---
 
-A traditional marketplace
+## Status
 
-The current focus is the intelligence layer connecting surplus material with nearby demand.
+**MVP: complete.** The current implementation demonstrates the full
+`DECLARE → UNDERSTAND → MATCH → EVALUATE → TRANSFER → MEASURE` workflow.
 
-Roadmap
-Potential future development includes:
+---
 
-Persistent production database
+## Author
 
-Real project onboarding
-
-User and organization accounts
-
-Verified material listings
-
-More robust geospatial infrastructure
-
-Real-time project demand
-
-Transfer status tracking
-
-Logistics coordination
-
-Evidence-backed environmental factors
-
-Construction document ingestion
-
-Material image recognition
-
-Historical reuse analytics
-
-Network-level circularity insights
-
-Status
-MVP — Complete
-
-The current implementation demonstrates the full:
-
-DECLARE → UNDERSTAND → MATCH → EVALUATE → TRANSFER → MEASURE
-
-workflow.
-
-Production build currently passes with TypeScript and lint checks clean.
-
-Author
-Befiker Gezahegn Hailemichael
-
+**Befiker Gezahegn Hailemichael**
 Software Engineer · Founder / Builder
 
-GitHub: @BefikerG
+[GitHub](https://github.com/BefikerG)
 
-License
-This project is currently maintained as an experimental MVP.
+---
 
-License terms may be added as the project moves toward public release.
+## License
+
+This project is currently maintained as an experimental MVP. No open-source license has been specified.
